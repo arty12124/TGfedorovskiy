@@ -17,7 +17,7 @@ from aiogram.utils.keyboard import InlineKeyboardBuilder
 from aiogram.client.default import DefaultBotProperties
 
 # ===================== CONFIG =====================
-TELEGRAM_BOT_TOKEN = "8513687333:AAG2olcYj-jDjMjFTlw4FoqRvJmUsPiaq6Q"  # ← ВСТАВЬ СЮДА СВОЙ ТОКЕН
+TELEGRAM_BOT_TOKEN = os.getenv("BOT_TOKEN")
 WELCOME_IMAGE_URL = "https://sun9-7.userapi.com/s/v1/ig2/63zp3aqiX6cZGx-Aal4ltfGvqLq7RIQlBemYcUfHrEH2lpEQCQgOMWRv6_HsRqpzGJPph-a-TWSyuc4b_pk8-YZ3.jpg?quality=95&as=32x12,48x18,72x27,108x41,160x61,240x91,360x137,480x183,540x205,640x244,720x274,1080x411,1280x487,1440x548,1640x624&from=bu&cs=1640x0"
 
 # НГТУ (Новосибирск)
@@ -925,5 +925,6 @@ if __name__ == "__main__":
         asyncio.run(main())
     except (KeyboardInterrupt, SystemExit):
         pass
+
 
 
