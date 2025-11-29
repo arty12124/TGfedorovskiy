@@ -1,0 +1,6 @@
+aiogram==3.5.0
+aiosqlite
+httpx
+beautifulsoup4
+pytz
+lxml
