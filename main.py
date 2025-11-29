@@ -1,10 +1,5 @@
-#git add runtime.txt
-#git commit -m "Use Python 3.11 runtime"
-#git push
-
-
-
 import os
+TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 import re
 import asyncio
 import aiosqlite
@@ -23,7 +18,6 @@ from aiogram.utils.keyboard import InlineKeyboardBuilder
 from aiogram.client.default import DefaultBotProperties
 
 # ===================== CONFIG =====================
-TELEGRAM_BOT_TOKEN = os.getenv("BOT_TOKEN")
 WELCOME_IMAGE_URL = "https://sun9-7.userapi.com/s/v1/ig2/63zp3aqiX6cZGx-Aal4ltfGvqLq7RIQlBemYcUfHrEH2lpEQCQgOMWRv6_HsRqpzGJPph-a-TWSyuc4b_pk8-YZ3.jpg?quality=95&as=32x12,48x18,72x27,108x41,160x61,240x91,360x137,480x183,540x205,640x244,720x274,1080x411,1280x487,1440x548,1640x624&from=bu&cs=1640x0"
 
 # НГТУ (Новосибирск)
@@ -931,6 +925,54 @@ if __name__ == "__main__":
         asyncio.run(main())
     except (KeyboardInterrupt, SystemExit):
         pass
+
+
+
+
+
+
+from aiohttp import web
+from aiogram import Bot, Dispatcher
+from aiogram.types import Update
+
+bot = Bot(TOKEN)
+dp = Dispatcher()
+
+# --- твои хендлеры остаются как есть ---
+# router.use(...) если есть router
+# dp.include_router(router) в конце
+
+# обработчик webhook
+async def handle_webhook(request: web.Request):
+    data = await request.json()
+    update = Update(**data)
+    await dp.process_update(update)
+    return web.Response(text="ok")
+
+async def on_startup(app):
+    # Render создаёт переменную с публичным URL
+    service_url = os.getenv("RENDER_EXTERNAL_URL")
+    webhook_url = f"{service_url}/webhook/{TOKEN}"
+
+    await bot.set_webhook(webhook_url)
+    print("Webhook set:", webhook_url)
+
+async def on_shutdown(app):
+    await bot.delete_webhook()
+    await bot.session.close()
+
+def create_app():
+    app = web.Application()
+    app.router.add_post(f"/webhook/{TOKEN}", handle_webhook)
+    app.on_startup.append(on_startup)
+    app.on_shutdown.append(on_shutdown)
+    return app
+
+app = create_app()
+
+if __name__ == "__main__":
+    web.run_app(app, host="0.0.0.0", port=int(os.getenv("PORT", 10000))_
+
 
 
 
